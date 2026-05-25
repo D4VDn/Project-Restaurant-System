@@ -165,7 +165,7 @@ class ProductSeeder extends Seeder {
         'name' => 'Combo Casal',
         'description' => '2 Pratos principais + 2 bebidas + sobremesa compartilhada.',
         'price' => 99.90,
-        'category' => 'Combos',
+        'category' => 'Comboss',
         'image' => 'combo-casal.png',
     ],
 ];
