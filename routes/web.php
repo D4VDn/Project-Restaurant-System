@@ -4,19 +4,25 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RestauranteController;
 use App\Models\Restaurante;
 
-// Página pública (vitrine)
+// 1. PÁGINAS PÚBLICAS (Acessíveis por qualquer pessoa)
 Route::get('/', function () {
     $restaurantes = Restaurante::orderBy('nome')->get();
     return view('home', compact('restaurantes'));
 })->name('home');
 
-// Dashboard administrativo (sem login)
+// Dashboard com checagem interna (se logado mostra o painel, se não, mostra os botões)
 Route::get('/dashboard', function () {
     $totalRestaurantes = Restaurante::count();
-    $melhorAvaliado = Restaurante::latest()->first(); // último cadastrado
+    $melhorAvaliado = Restaurante::latest()->first();
 
     return view('dashboard', compact('totalRestaurantes', 'melhorAvaliado'));
 })->name('dashboard');
 
-// CRUD de Restaurantes
-Route::resource('restaurantes', RestauranteController::class);
+
+// 2. ÁREA RESTRITA (Apenas para quem já fez login)
+Route::middleware(['auth', 'verified'])->group(function () {
+    // O CRUD de restaurantes continua protegido aqui
+    Route::resource('restaurantes', RestauranteController::class);
+});
+
+require __DIR__.'/auth.php';
